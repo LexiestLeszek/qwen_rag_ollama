@@ -5,12 +5,13 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
+from langchain.vectorstores.utils import filter_complex_metadata
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 
 llm = Ollama(model="qwen:1.8b", callbacks=[StreamingStdOutCallbackHandler()])
 
 # Define the question to be answered
-question = "What is this book about?"
+question = "What are the four steps of TOAD?"
 #question = input("Your question here: ")
 
 # Initialize the directory loader
@@ -20,13 +21,13 @@ raw_documents = DirectoryLoader('PDFdocs',
                                 show_progress=True, 
                                 use_multithreading=True).load()
 
-text_splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+text_splitter = CharacterTextSplitter(chunk_size=750, chunk_overlap=200)
 documents = text_splitter.split_documents(raw_documents)
+documents = filter_complex_metadata(documents)
 
 # Load the embeddings into Chroma
 print("Loading documents into Chroma\n")
-embeddings = HuggingFaceEmbeddings(model_name = 'sentence-transformers/all-MiniLM-L6-v2',
-                        model_kwargs={'device': 'cpu'})
+embeddings = HuggingFaceEmbeddings(model_name = 'sentence-transformers/all-MiniLM-L6-v2')
 
 db = Chroma.from_documents(documents, embedding=embeddings)
 
@@ -35,7 +36,7 @@ print(f"Question: {question}\n")
 prompt_template = """
     ### Instruction:
     You're question answering AI assistant, who answers questions based upon provided research in a distinct and clear way.
-    Answers must be based only on the information from research.
+    Answers must be based only on the information from research and nothing else. Don't use any other answer source except what is in the research.
 
     ## Research:
     {context}
