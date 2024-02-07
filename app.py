@@ -7,10 +7,10 @@ from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 
-llm = Ollama(model="qwen:0.5b", callbacks=[StreamingStdOutCallbackHandler()])
+llm = Ollama(model="qwen:1.8b", callbacks=[StreamingStdOutCallbackHandler()])
 
 # Define the question to be answered
-question = "What is the memory stream, and how does it help the agents?"
+question = "What is this book about?"
 #question = input("Your question here: ")
 
 # Initialize the directory loader
