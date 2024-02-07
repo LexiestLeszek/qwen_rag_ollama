@@ -30,19 +30,19 @@ embeddings = HuggingFaceEmbeddings(model_name = 'sentence-transformers/all-MiniL
 
 db = Chroma.from_documents(documents, embedding=embeddings)
 
-print(f">>>Question: {question}\n")
+print(f"Question: {question}\n")
 
 prompt_template = """
-### Instruction:
-You're question answering AI assistant, who answers questions based upon provided research in a distinct and clear way.
-Answers must be based only on the information from research.
+    ### Instruction:
+    You're question answering AI assistant, who answers questions based upon provided research in a distinct and clear way.
+    Answers must be based only on the information from research.
 
-## Research:
-{context}
+    ## Research:
+    {context}
 
-## Question:
-{question}
-"""
+    ## Question:
+    {question}
+    """
 
 PROMPT = PromptTemplate(
     template=prompt_template, input_variables=["context", "question"]
@@ -52,6 +52,9 @@ qa_chain = RetrievalQA.from_chain_type(
     llm,
     retriever=db.as_retriever(search_kwargs={"k": 3}),
     chain_type_kwargs={'prompt': PROMPT}
-)
+    )
 
-qa_chain.invoke({"query": question})
+result = qa_chain.invoke({"query": question})
+
+#print('QQQQQQQ',result['query'])
+#print('AAAAAAA',result['result'])
