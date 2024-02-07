@@ -1,8 +1,8 @@
-from langchain.document_loaders import DirectoryLoader, PyPDFLoader
-from langchain.llms import Ollama
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.document_loaders import DirectoryLoader, PyPDFLoader
+from langchain_community.llms import Ollama
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
@@ -54,4 +54,4 @@ qa_chain = RetrievalQA.from_chain_type(
     chain_type_kwargs={'prompt': PROMPT}
 )
 
-qa_chain({"query": question})
+qa_chain.invoke({"query": question})
