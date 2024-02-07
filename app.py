@@ -8,7 +8,7 @@ from langchain.prompts import PromptTemplate
 from langchain.vectorstores.utils import filter_complex_metadata
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 
-llm = Ollama(model="qwen:1.8b", callbacks=[StreamingStdOutCallbackHandler()])
+llm = Ollama(model="qwen:4b", callbacks=[StreamingStdOutCallbackHandler()])
 
 # Define the question to be answered
 question = "What are the four steps of TOAD?"
